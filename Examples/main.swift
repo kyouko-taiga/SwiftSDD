@@ -6,8 +6,11 @@
 //  Copyright © 2017 University of Geneva. All rights reserved.
 //
 
+import SwiftSDD
+
 
 let lib = swiftsdd_init()
+
 
 let builder = OrderBuilder()
 for i in 0 ... 3 {
