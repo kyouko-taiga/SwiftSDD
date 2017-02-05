@@ -10,7 +10,7 @@ public final class SDD {
 
     internal let pointer: OpaquePointer!
 
-    private init(pointer: OpaquePointer) {
+    internal init(pointer: OpaquePointer) {
         self.pointer = pointer
     }
 
@@ -19,8 +19,8 @@ public final class SDD {
     }
 
     public convenience init(
-        with: Order, userData: UnsafeRawPointer? = nil,
-        initializer: @escaping @convention(c) (UInt32, UnsafeRawPointer?) -> UInt32)
+        with order: Order, userData: UnsafeRawPointer? = nil,
+        using initializer: @escaping @convention(c) (UInt32, UnsafeRawPointer?) -> UInt32)
     {
         self.init(pointer: swiftsdd_sdd_create_with_order(order.pointer, &x, initializer))
     }
@@ -44,11 +44,11 @@ public final class SDD {
 
     // MARK: Set operations
 
-    public func formUnion(_ other: SDD) -> SDD {
+    public func union(_ other: SDD) -> SDD {
         return SDD(pointer: swiftsdd_sdd_union(self.pointer, other.pointer))
     }
 
-    public func formIntersection(_ other: SDD) -> SDD {
+    public func intersction(_ other: SDD) -> SDD {
         return SDD(pointer: swiftsdd_sdd_intersection(self.pointer, other.pointer))
     }
 

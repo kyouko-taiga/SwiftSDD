@@ -36,13 +36,27 @@ let rhs = SDD(with: order, userData: &x) {
     return 0
 }
 
-var res = lhs.formUnion(rhs)
+struct Increment: UserFunction {
+
+    public let is_a_selector = true
+    public let is_a_shifter = false
+
+    func call(values: Set<UInt32>) -> Set<UInt32> {
+        return Set(values.map({ $0 + UInt32(1) }))
+    }
+
+}
+
+var inc: UserFunction = Increment()
+
+var hom = Homomorphism.function(with: order, on: 2, using: &inc)
+hom = hom.union(order: order, Homomorphism.identity())
+
+let res = hom.apply(to: lhs, with: order).union(rhs)
 
 for path in res {
     print(path.map({ String(describing: $0) }).joined(separator: ", "))
 }
-
-res = res.formIntersection(lhs)
 
 print("\(res.count) object(s) encoded.")
 print("\(res.nodes) node(s).")

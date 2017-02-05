@@ -15,21 +15,13 @@
 #pragma clang pop
 
 #include "wrapper.h"
+#include "user_types.hh"
 
 
 struct conf: public sdd::flat_set_default_configuration {
 
     using Identifier = uint32_t;
     using Values = sdd::values::flat_set<uint32_t>;
-
-};
-
-
-template <typename C>
-struct swiftsdd_value_generator {
-
-    typename C::Values* container;
-    typename C::Values::const_iterator iterator;
 
 };
 
@@ -149,7 +141,7 @@ extern "C" {
         auto lhs = reinterpret_cast<sdd::SDD<conf>*>(lhs_ptr);
         auto rhs = reinterpret_cast<sdd::SDD<conf>*>(rhs_ptr);
 
-        auto* res = new sdd::SDD<conf>();
+        auto res = new sdd::SDD<conf>();
         *res = *lhs + *rhs;
         return reinterpret_cast<swiftsdd_obj*>(res);
     }
@@ -158,7 +150,7 @@ extern "C" {
         auto lhs = reinterpret_cast<sdd::SDD<conf>*>(lhs_ptr);
         auto rhs = reinterpret_cast<sdd::SDD<conf>*>(rhs_ptr);
 
-        auto* res = new sdd::SDD<conf>();
+        auto res = new sdd::SDD<conf>();
         *res = *lhs & *rhs;
         return reinterpret_cast<swiftsdd_obj*>(res);
     }
@@ -242,6 +234,126 @@ extern "C" {
         array.values = nullptr;
     }
 
+
+    // MARK: Interface for sdd::homomorphism
+
+    swiftsdd_obj* swiftsdd_hom_identity_create() {
+        auto hom = new sdd::homomorphism<conf>(sdd::id<conf>());
+        return reinterpret_cast<swiftsdd_obj*>(hom);
+    }
+
+    swiftsdd_obj* swiftsdd_hom_constant_create(swiftsdd_obj* sdd_ptr) {
+        auto sdd = reinterpret_cast<sdd::SDD<conf>*>(sdd_ptr);
+        auto hom = new sdd::homomorphism<conf>(sdd::constant(*sdd));
+        return reinterpret_cast<swiftsdd_obj*>(hom);
+    }
+
+    swiftsdd_obj* swiftsdd_hom_cons_create(
+        swiftsdd_obj* order_ptr,
+        swiftsdd_uint32_array valuation,
+        swiftsdd_obj* hom_ptr)
+    {
+        auto order = reinterpret_cast<sdd::order<conf>*>(order_ptr);
+        auto next_hom = reinterpret_cast<sdd::homomorphism<conf>*>(hom_ptr);
+
+        auto builder = sdd::values::values_traits<conf::Values>::builder();
+        builder.reserve(valuation.size);
+        for (std::size_t i = 0; i < valuation.size; ++i) {
+            builder.insert(valuation.values[i]);
+        }
+        auto values = conf::Values(std::move(builder));
+
+        auto hom = new sdd::homomorphism<conf>(sdd::cons(*order, values, *next_hom));
+        return reinterpret_cast<swiftsdd_obj*>(hom);
+    }
+
+    swiftsdd_obj* swiftsdd_hom_fixpoint_create(swiftsdd_obj* hom_ptr) {
+        auto f = reinterpret_cast<sdd::homomorphism<conf>*>(hom_ptr);
+        auto hom = new sdd::homomorphism<conf>(sdd::fixpoint(*f));
+        return reinterpret_cast<swiftsdd_obj*>(hom);
+    }
+
+    swiftsdd_obj* swiftsdd_hom_function_create(
+        swiftsdd_obj* order_ptr,
+        uint32_t identifier,
+        swiftsdd_user_function user_function)
+    {
+        auto order = reinterpret_cast<sdd::order<conf>*>(order_ptr);
+        auto hom = new sdd::homomorphism<conf>(
+            sdd::function<conf>(
+                *order, identifier, swiftsdd::homomorphism_function<conf> { user_function }));
+        return reinterpret_cast<swiftsdd_obj*>(hom);
+    }
+
+    swiftsdd_obj* swiftsdd_hom_rewrite(swiftsdd_obj* order_ptr, swiftsdd_obj* hom_ptr) {
+        auto order = reinterpret_cast<sdd::order<conf>*>(order_ptr);
+        auto f = reinterpret_cast<sdd::homomorphism<conf>*>(hom_ptr);
+        auto hom = new sdd::homomorphism<conf>(sdd::rewrite(*order, *f));
+        return reinterpret_cast<swiftsdd_obj*>(hom);
+    }
+
+    swiftsdd_obj* swiftsdd_hom_composition(swiftsdd_obj* lhs_ptr, swiftsdd_obj* rhs_ptr) {
+        auto lhs = reinterpret_cast<sdd::homomorphism<conf>*>(lhs_ptr);
+        auto rhs = reinterpret_cast<sdd::homomorphism<conf>*>(rhs_ptr);
+
+        auto res = new sdd::homomorphism<conf>(sdd::composition(*lhs, *rhs));
+        return reinterpret_cast<swiftsdd_obj*>(res);
+    }
+
+    swiftsdd_obj* swiftsdd_hom_sum(
+        swiftsdd_obj* order_ptr,
+        swiftsdd_obj** hom_array_ptr,
+        size_t operand_number)
+    {
+        auto order = *reinterpret_cast<sdd::order<conf>*>(order_ptr);
+
+        std::vector<sdd::homomorphism<conf>> operands;
+        operands.reserve(operand_number);
+        for (std::size_t i = 0; i < operand_number; ++i) {
+            auto hom = *reinterpret_cast<sdd::homomorphism<conf>*>(hom_array_ptr[i]);
+            operands.push_back(hom);
+        }
+
+        auto res = new sdd::homomorphism<conf>(
+            sdd::sum(order, operands.begin(), operands.end()));
+        return reinterpret_cast<swiftsdd_obj*>(res);
+    }
+
+    swiftsdd_obj* swiftsdd_hom_intersection(
+        swiftsdd_obj* order_ptr,
+        swiftsdd_obj** hom_array_ptr,
+        size_t operand_number)
+    {
+        auto order = *reinterpret_cast<sdd::order<conf>*>(order_ptr);
+
+        std::vector<sdd::homomorphism<conf>> operands;
+        operands.reserve(operand_number);
+        for (std::size_t i = 0; i < operand_number; ++i) {
+            auto hom = *reinterpret_cast<sdd::homomorphism<conf>*>(hom_array_ptr[i]);
+            operands.push_back(hom);
+        }
+
+        auto res = new sdd::homomorphism<conf>(
+            sdd::intersection(order, operands.begin(), operands.end()));
+        return reinterpret_cast<swiftsdd_obj*>(res);
+    }
+
+    void swiftsdd_hom_destroy(swiftsdd_obj* hom_ptr) {
+        delete reinterpret_cast<sdd::homomorphism<conf>*>(hom_ptr);
+    }
+
+    swiftsdd_obj* swiftsdd_hom_apply(
+        swiftsdd_obj* order_ptr,
+        swiftsdd_obj* hom_ptr,
+        swiftsdd_obj* sdd_ptr)
+    {
+        auto order = *reinterpret_cast<sdd::order<conf>*>(order_ptr);
+        auto hom = *reinterpret_cast<sdd::homomorphism<conf>*>(hom_ptr);
+        auto sdd = *reinterpret_cast<sdd::SDD<conf>*>(sdd_ptr);
+
+        auto res = new sdd::SDD<conf>(hom(order, sdd));
+        return reinterpret_cast<swiftsdd_obj*>(res);
+    }
 
     // MARK: Interface for sdd::tools
     swiftsdd_pair_of_unsigned_int swiftsdd_tools_nodes(swiftsdd_obj* sdd_ptr) {

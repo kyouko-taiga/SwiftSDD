@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		12086C581E475C9A00A7CCCF /* Homomorphism.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12086C571E475C9A00A7CCCF /* Homomorphism.swift */; };
+		12086C5A1E47664500A7CCCF /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12086C591E47664500A7CCCF /* Array+Extensions.swift */; };
 		12317E311E45E88C001E1A6B /* SDD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12317E301E45E88C001E1A6B /* SDD.swift */; };
 		12317E331E461786001E1A6B /* ValueMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12317E321E461786001E1A6B /* ValueMapper.swift */; };
 		12317E351E461BB6001E1A6B /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12317E341E461BB6001E1A6B /* Order.swift */; };
@@ -47,17 +49,20 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		12086C541E474F5E00A7CCCF /* user_types.hh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = user_types.hh; sourceTree = "<group>"; };
+		12086C571E475C9A00A7CCCF /* Homomorphism.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Homomorphism.swift; sourceTree = "<group>"; };
+		12086C591E47664500A7CCCF /* Array+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		12317E301E45E88C001E1A6B /* SDD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SDD.swift; sourceTree = "<group>"; };
 		12317E321E461786001E1A6B /* ValueMapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValueMapper.swift; sourceTree = "<group>"; };
 		12317E341E461BB6001E1A6B /* Order.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
-		12317E361E463793001E1A6B /* libboost_coroutine.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_coroutine.dylib"; path = "/usr/local/lib/libboost_coroutine.dylib"; sourceTree = "<group>"; };
+		12317E361E463793001E1A6B /* libboost_coroutine.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_coroutine.dylib; path = /usr/local/lib/libboost_coroutine.dylib; sourceTree = "<group>"; };
 		12317E381E4691F8001E1A6B /* Path.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Path.swift; sourceTree = "<group>"; };
 		75DB72DB1E44D98900273578 /* SwiftSDD */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SwiftSDD; sourceTree = BUILT_PRODUCTS_DIR; };
 		75DB72DE1E44D98900273578 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
 		75DB72E51E44DA8500273578 /* libsdd.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = libsdd.xcodeproj; path = libsdd/libsdd.xcodeproj; sourceTree = "<group>"; };
 		75DB72EE1E44DBB400273578 /* SwiftSDD-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SwiftSDD-Bridging-Header.h"; sourceTree = "<group>"; };
 		75DB72EF1E44DBB400273578 /* wrapper.cc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = wrapper.cc; sourceTree = "<group>"; };
-		75DB72F21E44E15D00273578 /* libboost_system.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_system.dylib; path = "/usr/local/lib/libboost_system.dylib"; sourceTree = "<group>"; };
+		75DB72F21E44E15D00273578 /* libboost_system.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libboost_system.dylib; path = /usr/local/lib/libboost_system.dylib; sourceTree = "<group>"; };
 		75DB72F41E44F00300273578 /* wrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = wrapper.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -97,11 +102,14 @@
 			children = (
 				75DB72DE1E44D98900273578 /* main.swift */,
 				12317E301E45E88C001E1A6B /* SDD.swift */,
+				12086C571E475C9A00A7CCCF /* Homomorphism.swift */,
 				12317E341E461BB6001E1A6B /* Order.swift */,
 				12317E381E4691F8001E1A6B /* Path.swift */,
 				12317E321E461786001E1A6B /* ValueMapper.swift */,
+				12086C591E47664500A7CCCF /* Array+Extensions.swift */,
 				75DB72EE1E44DBB400273578 /* SwiftSDD-Bridging-Header.h */,
 				75DB72F41E44F00300273578 /* wrapper.h */,
+				12086C541E474F5E00A7CCCF /* user_types.hh */,
 				75DB72EF1E44DBB400273578 /* wrapper.cc */,
 			);
 			path = SwiftSDD;
@@ -210,8 +218,10 @@
 				75DB72DF1E44D98900273578 /* main.swift in Sources */,
 				75DB72F01E44DBB400273578 /* wrapper.cc in Sources */,
 				12317E351E461BB6001E1A6B /* Order.swift in Sources */,
+				12086C581E475C9A00A7CCCF /* Homomorphism.swift in Sources */,
 				12317E311E45E88C001E1A6B /* SDD.swift in Sources */,
 				12317E391E4691F8001E1A6B /* Path.swift in Sources */,
+				12086C5A1E47664500A7CCCF /* Array+Extensions.swift in Sources */,
 				12317E331E461786001E1A6B /* ValueMapper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
