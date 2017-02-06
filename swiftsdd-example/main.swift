@@ -1,13 +1,10 @@
 //
 //  main.swift
-//  SwiftSDD
+//  swiftsdd-example
 //
-//  Created by Dimitri Racordon on 03.02.17.
+//  Created by Dimitri Racordon on 06.02.17.
 //  Copyright © 2017 University of Geneva. All rights reserved.
 //
-
-import SwiftSDD
-
 
 let lib = swiftsdd_init()
 
