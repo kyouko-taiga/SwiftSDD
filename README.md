@@ -51,7 +51,7 @@ let x = SDD(with: order) { identifier, _ in
 You can get a string representation of your SDD with the `dump()` method.
 Be sure to use it only on small SDDs, as the output can get really huge:
 
-```
+```swift
 print(x.dump())
 // Prints "2[{2} --> 1[{1} --> 0[{0} --> |1|]]]"
 ```
