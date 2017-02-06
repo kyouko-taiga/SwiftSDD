@@ -22,7 +22,8 @@ public final class SDD {
         with order: Order, userData: UnsafeRawPointer? = nil,
         using initializer: @escaping @convention(c) (UInt32, UnsafeRawPointer?) -> UInt32)
     {
-        self.init(pointer: swiftsdd_sdd_create_with_order(order.pointer, &x, initializer))
+        self.init(
+            pointer: swiftsdd_sdd_create_with_order(order.pointer, userData, initializer))
     }
 
     deinit {
