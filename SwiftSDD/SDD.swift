@@ -49,7 +49,7 @@ public final class SDD {
         return SDD(pointer: swiftsdd_sdd_union(self.pointer, other.pointer))
     }
 
-    public func intersction(_ other: SDD) -> SDD {
+    public func intersection(_ other: SDD) -> SDD {
         return SDD(pointer: swiftsdd_sdd_intersection(self.pointer, other.pointer))
     }
 
