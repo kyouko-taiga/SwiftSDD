@@ -4,6 +4,11 @@
 #include "wrapper.h"
 
 
+// MARK: Interface for user types utilies.
+
+void          swiftsdd_uint32_set_clear(swiftsdd_uint32_set* set);
+
+
 // MARK: Interface for sdd::init.
 
 swiftsdd_obj* swiftsdd_init();
@@ -60,9 +65,9 @@ swiftsdd_obj* swiftsdd_path_generator_get(swiftsdd_obj* generator_ptr, bool* did
 void          swiftsdd_path_destroy(swiftsdd_obj* path_ptr);
 
 size_t        swiftsdd_path_size(swiftsdd_obj* path_ptr);
-swiftsdd_uint32_array swiftsdd_path_at(swiftsdd_obj* path_ptr, size_t index);
+swiftsdd_uint32_set swiftsdd_path_at(swiftsdd_obj* path_ptr, size_t index);
 
-void          swiftsdd_uint32_array_destroy(swiftsdd_uint32_array array);
+void          swiftsdd_uint32_array_destroy(swiftsdd_uint32_set array);
 
 
 // MARK: Interface for sdd::homomorphism
@@ -72,7 +77,7 @@ swiftsdd_obj* swiftsdd_hom_constant_create(swiftsdd_obj* sdd_ptr);
 
 swiftsdd_obj* swiftsdd_hom_cons_create(
     swiftsdd_obj* order_ptr,
-    swiftsdd_uint32_array valuation,
+    swiftsdd_uint32_set valuation,
     swiftsdd_obj* hom_ptr);
 
 swiftsdd_obj* swiftsdd_hom_fixpoint_create(swiftsdd_obj* hom_ptr);

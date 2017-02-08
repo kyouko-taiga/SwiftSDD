@@ -41,7 +41,7 @@ struct Increment: UserFunction {
     public let is_a_selector = true
     public let is_a_shifter = false
 
-    func call(values: Set<UInt32>) -> Set<UInt32> {
+    func call(values: swiftsdd_uint32_set) -> Set<UInt32> {
         return Set(values.map({ $0 + UInt32(1) }))
     }
 

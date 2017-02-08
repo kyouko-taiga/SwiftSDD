@@ -19,7 +19,7 @@ struct Filter: UserFunction {
     public let is_a_selector = true
     public let is_a_shifter = false
 
-    func call(values: Set<UInt32>) -> Set<UInt32> {
+    func call(values: swiftsdd_uint32_set) -> Set<UInt32> {
         return Set(values.flatMap { return $0 > 0 ? $0 : nil })
     }
 
@@ -30,7 +30,7 @@ struct Consume: UserFunction {
     public let is_a_selector = true
     public let is_a_shifter = false
 
-    func call(values: Set<UInt32>) -> Set<UInt32> {
+    func call(values: swiftsdd_uint32_set) -> Set<UInt32> {
         return Set(values.map { $0 - UInt32(1) })
     }
 
@@ -41,7 +41,7 @@ struct Produce: UserFunction {
     public let is_a_selector = true
     public let is_a_shifter = false
 
-    func call(values: Set<UInt32>) -> Set<UInt32> {
+    func call(values: swiftsdd_uint32_set) -> Set<UInt32> {
         return Set(values.map { $0 + UInt32(1) })
     }
 

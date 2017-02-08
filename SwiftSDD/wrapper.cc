@@ -14,8 +14,8 @@
 #include "sdd/tools/nodes.hh"
 #pragma clang pop
 
-#include "wrapper.h"
 #include "user_types.hh"
+#include "wrapper.h"
 
 
 struct conf: public sdd::flat_set_default_configuration {
@@ -27,6 +27,15 @@ struct conf: public sdd::flat_set_default_configuration {
 
 
 extern "C" {
+
+    // MARK: Interface for user types utilities.
+
+    void swiftsdd_uint32_set_clear(swiftsdd_uint32_set* set) {
+        delete set->data;
+        set->data = nullptr;
+        set->count = 0;
+    }
+
 
     // MARK: Interface for sdd::init
 
@@ -216,22 +225,19 @@ extern "C" {
         return path->size();
     }
 
-    swiftsdd_uint32_array swiftsdd_path_at(swiftsdd_obj* path_ptr, size_t index) {
+    swiftsdd_uint32_set swiftsdd_path_at(swiftsdd_obj* path_ptr, size_t index) {
         auto path = reinterpret_cast<std::vector<conf::Values>*>(path_ptr);
         auto values = path->at(index);
 
-        auto res = swiftsdd_uint32_array {
-            .values = new uint32_t[values.size()]{},
-            .size = values.size()
+        // Note that it's the caller's responsibility should deallocated this
+        // memory.
+        auto res = swiftsdd_uint32_set {
+            .data = new uint32_t[values.size()]{},
+            .count = values.size()
         };
-        std::copy(values.begin(), values.end(), res.values);
+        std::copy(values.begin(), values.end(), res.data);
 
         return res;
-    }
-
-    void swiftsdd_uint32_array_destroy(swiftsdd_uint32_array array) {
-        delete array.values;
-        array.values = nullptr;
     }
 
 
@@ -250,16 +256,16 @@ extern "C" {
 
     swiftsdd_obj* swiftsdd_hom_cons_create(
         swiftsdd_obj* order_ptr,
-        swiftsdd_uint32_array valuation,
+        swiftsdd_uint32_set valuation,
         swiftsdd_obj* hom_ptr)
     {
         auto order = reinterpret_cast<sdd::order<conf>*>(order_ptr);
         auto next_hom = reinterpret_cast<sdd::homomorphism<conf>*>(hom_ptr);
 
         auto builder = sdd::values::values_traits<conf::Values>::builder();
-        builder.reserve(valuation.size);
-        for (std::size_t i = 0; i < valuation.size; ++i) {
-            builder.insert(valuation.values[i]);
+        builder.reserve(valuation.count);
+        for (std::size_t i = 0; i < valuation.count; ++i) {
+            builder.insert(valuation.data[i]);
         }
         auto values = conf::Values(std::move(builder));
 

@@ -92,22 +92,19 @@ public protocol UserFunction {
     var is_a_selector: Bool { get }
     var is_a_shifter: Bool { get }
 
-    func call(values: Set<UInt32>) -> Set<UInt32>
+    func call(values: swiftsdd_uint32_set) -> Set<UInt32>
 
 }
 
 
 /// Wrapper to a user function.
 fileprivate func userFunctionWrapper(
-    cArray: swiftsdd_uint32_array,
-    user_data: UnsafeMutableRawPointer?) -> swiftsdd_uint32_array
+    values: swiftsdd_uint32_set,
+    user_data: UnsafeMutableRawPointer?) -> swiftsdd_uint32_set
 {
     if let receiver = user_data?.assumingMemoryBound(to: UserFunction.self).pointee {
-        let values = Set([UInt32].fromCArray(values: cArray.values, size: cArray.size))
-        var res = receiver.call(values: values).map { $0 }
-
-        return swiftsdd_uint32_array(values: &res, size: res.count)
+        return swiftsdd_uint32_set(receiver.call(values: values))
     }
 
-    return cArray
+    return values
 }

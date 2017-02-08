@@ -13,6 +13,8 @@
 #include "sdd/sdd.hh"
 #pragma clang pop
 
+#include "wrapper.h"
+
 
 namespace swiftsdd {
 
@@ -25,24 +27,25 @@ struct homomorphism_function {
     swiftsdd_user_function fn_holder;
 
     values_type operator()(const values_type& values) const {
-        // Convert the input set of values into a swiftsdd_uint32_array.
-        auto arr = swiftsdd_uint32_array {
-            .values = new uint32_t[values.size()]{},
-            .size = values.size()
+        // Convert the input set of values into a swiftsdd_uint32_set.
+        auto set = swiftsdd_uint32_set {
+            .data = new uint32_t[values.size()]{},
+            .count = values.size()
         };
-        std::copy(values.begin(), values.end(), arr.values);
+        std::copy(values.begin(), values.end(), set.data);
 
         // Call the user function.
-        auto res = (*(this->fn_holder.fn))(arr, this->fn_holder.user_data);
-        delete arr.values;
-        arr.values = nullptr;
+        auto res = (*(this->fn_holder.fn))(set, this->fn_holder.user_data);
 
         // Convert back the result of the user function to a set of values.
         auto builder = builder_type();
-        builder.reserve(res.size);
-        for (std::size_t i = 0; i < res.size; ++i) {
-            builder.insert(res.values[i]);
+        builder.reserve(res.count);
+        for (std::size_t i = 0; i < res.count; ++i) {
+            builder.insert(res.data[i]);
         }
+
+        swiftsdd_uint32_set_clear(&set);
+        swiftsdd_uint32_set_clear(&res);
 
         return std::move(builder);
     }

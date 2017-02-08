@@ -43,9 +43,11 @@ public class PathIterator: IteratorProtocol {
 
         defer { self.position += 1 }
 
-        let component = swiftsdd_path_at(self.path.pointer, position)
-        let buffer = UnsafeBufferPointer(start: component.values, count: component.size)
-        return Set(buffer)
+        var values = swiftsdd_path_at(self.path.pointer, position)
+        let result = Set(values)
+        swiftsdd_uint32_set_clear(&values)
+
+        return result
     }
 
 }
@@ -75,9 +77,11 @@ extension Path: Collection {
     }
 
     public subscript(position: Index) -> Iterator.Element {
-        let component = swiftsdd_path_at(self.pointer, position)
-        let buffer = UnsafeBufferPointer(start: component.values, count: component.size)
-        return Set(buffer)
+        var values = swiftsdd_path_at(self.pointer, position)
+        let result = Set(values)
+        swiftsdd_uint32_set_clear(&values)
+
+        return result
     }
 
     public func index(after i: Index) -> Index {
