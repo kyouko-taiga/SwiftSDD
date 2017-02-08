@@ -525,6 +525,7 @@
 				75B40A3C1E48D45A00CA90BA /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		75DB72D61E44D98900273578 /* Build configuration list for PBXProject "SwiftSDD" */ = {
 			isa = XCConfigurationList;
